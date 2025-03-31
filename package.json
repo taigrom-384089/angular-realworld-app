@@ -1,0 +1,52 @@
+{
+  "name": "angular-realworld",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint --force",
+    "prepare": "husky install"
+  },
+  "engines": {
+    "node": "^18.13.0 || ^20.9.0"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "19.2.4",
+    "@angular/common": "19.2.4",
+    "@angular/compiler": "19.2.4",
+    "@angular/core": "19.2.4",
+    "@angular/forms": "19.2.4",
+    "@angular/platform-browser": "19.2.4",
+    "@angular/platform-browser-dynamic": "19.2.4",
+    "@angular/router": "19.2.4",
+    "angular-in-memory-web-api": "^0.19.0",
+    "marked": "^11.1.0",
+    "rxjs": "^7.4.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.15.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^19.2.5",
+    "@angular/cli": "^19.2.5",
+    "@angular/compiler-cli": "19.2.4",
+    "@types/jasmine": "~4.3.0",
+    "@types/marked": "^6.0.0",
+    "husky": "^8.0.3",
+    "jasmine-core": "~4.5.0",
+    "karma": "~6.4.1",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.0.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.1",
+    "typescript": "~5.8.2"
+  },
+  "lint-staged": {
+    "*.{ts,html,css,json,md}": "prettier --write"
+  }
+}
