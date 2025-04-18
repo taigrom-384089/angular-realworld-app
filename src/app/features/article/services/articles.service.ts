@@ -10,19 +10,19 @@ export class ArticlesService {
   constructor(private readonly http: HttpClient) {}
 
   query(
-    config: ArticleListConfig,
+    config: ArticleListConfig
   ): Observable<{ articles: Article[]; articlesCount: number }> {
     // Convert any filters over to Angular's URLSearchParams
     let params = new HttpParams();
 
-    // Object.keys(config.filters).forEach((key) => {
-    //   // @ts-ignore
-    //   params = params.set(key, config.filters[key]);
-    // });
+    Object.keys(config.filters).forEach((key) => {
+      // @ts-ignore
+      params = params.set(key, config.filters[key]);
+    });
 
     return this.http.get<{ articles: Article[]; articlesCount: number }>(
       "/articles" + (config.type === "feed" ? "/feed" : ""),
-      { params },
+      { params }
     );
   }
 

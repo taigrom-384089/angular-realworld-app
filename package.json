@@ -10,9 +10,6 @@
     "lint": "ng lint --force",
     "prepare": "husky install"
   },
-  "engines": {
-    "node": "^18.13.0 || ^20.9.0"
-  },
   "private": true,
   "dependencies": {
     "@angular/animations": "19.2.4",
