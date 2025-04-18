@@ -1,12 +1,21 @@
+import { HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { InMemoryDbService, RequestInfo } from "angular-in-memory-web-api";
-import { Observable } from "rxjs";
+import {
+  InMemoryDbService,
+  RequestInfo,
+  RequestInfoUtilities,
+  ResponseOptions,
+  STATUS,
+} from "angular-in-memory-web-api";
+import { Observable, of } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class InMemoryDataService implements InMemoryDbService {
-  createDb(reqInfo?: RequestInfo | undefined): {} | Observable<{}> | Promise<{}> {
+  createDb(
+    reqInfo?: RequestInfo | undefined
+  ): {} | Observable<{}> | Promise<{}> {
     const users = [
       {
         id: 1,
@@ -53,6 +62,8 @@ export class InMemoryDataService implements InMemoryDbService {
           image: "https://i.stack.imgur.com/xHWG8.jpg",
           following: false,
         },
+        offset: 0,
+        limit: 10
       },
       {
         slug: "how-to-learn-react",
@@ -70,6 +81,8 @@ export class InMemoryDataService implements InMemoryDbService {
           image: "https://i.stack.imgur.com/xHWG8.jpg",
           following: false,
         },
+        offset: 0,
+        limit: 10
       },
       {
         slug: "how-to-build-a-react-drag-and-drop-file-upload-ui",
@@ -88,6 +101,8 @@ export class InMemoryDataService implements InMemoryDbService {
           image: "https://i.stack.imgur.com/xHWG8.jpg",
           following: false,
         },
+        offset: 0,
+        limit: 10
       },
       {
         slug: "how-to-build-a-react-drag-and-drop-file-upload-ui",
@@ -106,21 +121,209 @@ export class InMemoryDataService implements InMemoryDbService {
           image: "https://i.stack.imgur.com/xHWG8.jpg",
           following: false,
         },
+        offset: 0,
+        limit: 10
+      },
+      {
+        slug: "feed-how-to-build-a-react-drag-and-drop-file-upload-ui",
+        title: "How to build a React drag and drop file upload UI",
+        description:
+          "In this video, I'll show you how to build a drag and drop file upload UI in React.",
+        body: "In this video, I'll show you how to build a drag and drop file upload UI in React.",
+        tagList: ["react", "redux", "javascript"],
+        createdAt: "2020-03-10T04:37:25.000Z",
+        updatedAt: "2020-03-10T04:37:25.000Z",
+        favorited: false,
+        favoritesCount: 0,
+        author: {
+          username: "stema",
+          bio: "I work at statefarm",
+          image: "https://i.stack.imgur.com/xHWG8.jpg",
+          following: false,
+        },
+        offset: 0,
+        limit: 10,
+        type: "feed"
       },
     ];
 
     const articlesCount = articles.length;
 
-    const tags = ['react', 'redux', 'javascript', 'node', 'css', 'html', 'python', 'java', 'c++', 'c', 'go', 'ruby', 'php', 'swift', 'kotlin', 'scala', 'dart', 'rust', 'elixir', 'haskell', 'coffeescript', 'perl', 'r', 'matlab', 'fortran', 'lua', 'groovy', 'bash', 'powershell', 'sql', 'nosql', 'mongodb', 'postgresql', 'mysql', 'redis', 'memcached', 'elasticsearch', 'kafka', 'rabbitmq', 'docker', 'kubernetes', 'aws', 'azure', 'google-cloud', 'firebase', 'google-analytics', 'google-tag-manager'];
+    const tags = [
+      "react",
+      "redux",
+      "javascript",
+      "node",
+      "css",
+      "html",
+      "python",
+      "java",
+      "c++",
+      "c",
+      "go",
+      "ruby",
+      "php",
+      "swift",
+      "kotlin",
+      "scala",
+      "dart",
+      "rust",
+      "elixir",
+      "haskell",
+      "coffeescript",
+      "perl",
+      "r",
+      "matlab",
+      "fortran",
+      "lua",
+      "groovy",
+      "bash",
+      "powershell",
+      "sql",
+      "nosql",
+      "mongodb",
+      "postgresql",
+      "mysql",
+      "redis",
+      "memcached",
+      "elasticsearch",
+      "kafka",
+      "rabbitmq",
+      "docker",
+      "kubernetes",
+      "aws",
+      "azure",
+      "google-cloud",
+      "firebase",
+      "google-analytics",
+      "google-tag-manager",
+    ];
 
-
-    const db = { 
-      users, 
-      user: {user}, 
-      articles: { articles: articles, articlesCount: articlesCount }, 
-      tags: { tags } 
+    const db = {
+      users,
+      user: { user },
+      articles: { articles: articles, articlesCount: articlesCount },
+      tags: { tags },
     };
 
     return db;
+  }
+
+  protected get(reqInfo: RequestInfo): Observable<ResponseOptions> {
+    let data = reqInfo.collection;
+    const id = reqInfo.id;
+    const query = reqInfo.query;
+    const url = reqInfo.url;
+
+    // tslint:disable-next-line:triple-equals
+    if (id != undefined && id !== "") {
+      data = this.findById(data, id);
+    } else if (query) {
+      data = this.applyQuery(data, query);
+    }
+
+    if (!data) {
+      return this.createErrorResponseOptions(
+        url,
+        STATUS.NOT_FOUND,
+        `'${reqInfo.collectionName}' with id='${id}' not found`,
+        reqInfo.utils
+      );
+    }
+
+    return reqInfo.utils.createResponse$(() => ({
+      body: this.clone(data),
+      headers: reqInfo.headers,
+      status: STATUS.OK,
+      url: url
+    }));
+  }
+
+  /**
+   * Find first instance of item in collection by `item.id`
+   * @param data
+   * @param id
+   */
+  protected findById<T extends { id: any, slug: any }>(
+    data: T | T[],
+    id: any
+  ): T | undefined {
+
+    if (!Array.isArray(data)) { // { a:1, b: []}
+      // { b:[] }
+      data = (Object.entries(data)[0][1] as any[]);
+    }
+
+    let result = data.find((item: T) => item.id === id);
+
+    if (!result) {
+      result = data.find((item: T) => item.slug === id);
+    }
+
+    return result;
+  }
+
+  /**
+   * Apply query/search parameters as a filter over the collection
+   * This impl only supports RegExp queries on string properties of the collection
+   * ANDs the conditions together
+   */
+  protected applyQuery(data: any | any[], query: Map<string, string[]>): any | any[] {
+    // extract filtering conditions - {propertyName, RegExps) - from query/search parameters
+    const conditions: { name: string; rx: RegExp }[] = [];
+    const caseSensitive = undefined;
+    query.forEach((value: string[], name: string) => {
+      value.forEach((v) =>
+        conditions.push({ name, rx: new RegExp(decodeURI(v), caseSensitive) })
+      );
+    });
+
+    const len = conditions.length;
+    if (!len) {
+      return data;
+    }
+
+    if (!Array.isArray(data)) { // { a:1, b: []}
+      // { a:1 }                                                 // { b:[] }
+      data[Object.entries(data)[0][0]] = this.filterCollection(Object.entries(data)[0][1] as any[], conditions, len);
+      return data;
+    }
+
+    return this.filterCollection(data, conditions, len);
+  }
+
+  protected filterCollection(collection: any[], conditions: any[], len: number): any[] {
+    // AND the RegExp conditions
+    return collection.filter((row) => {
+      let ok = true;
+      let i = len;
+      while (ok && i) {
+        i -= 1;
+        const cond = conditions[i];
+        ok = cond.rx.test(row[cond.name]);
+      }
+      return ok;
+    });
+  }
+
+  protected clone(data: any): any {
+    return JSON.parse(JSON.stringify(data));
+  }
+
+  protected createErrorResponseOptions(
+    url: string,
+    status: number,
+    message: string,
+    utils: RequestInfoUtilities
+  ): Observable<ResponseOptions> {
+
+    return utils.createResponse$(() => (
+      {
+        body: { error: `${message}` },
+        url: url,
+        headers: new HttpHeaders({ "Content-Type": "application/json" }),
+        status: status,
+      }
+    ))
   }
 }

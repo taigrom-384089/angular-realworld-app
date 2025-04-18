@@ -64,7 +64,7 @@ export class ArticleListComponent {
     }
   }
 
-  constructor(private articlesService: ArticlesService) {}
+  constructor(private articlesService: ArticlesService) { }
 
   setPageTo(pageNumber: number) {
     this.currentPage = pageNumber;
