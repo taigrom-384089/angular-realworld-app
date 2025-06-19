@@ -42,11 +42,11 @@
         <app-article-list [limit]="10" [config]="listConfig" />
       </div>
 
-      @if(tags$ | async; as tags) {
+      @if (tags$ | async; as tags) {
         <div class="col-md-3">
           <div class="sidebar">
             <p>Popular Tags</p>
-  
+
             <div class="tag-list">
               @for (tag of tags; track tag) {
                 <a
@@ -57,17 +57,15 @@
                 </a>
               }
             </div>
-  
+
             <div [hidden]="tagsLoaded">Loading tags...</div>
-  
+
             <div [hidden]="!tagsLoaded || tags.length > 0">
               No tags are here... yet.
             </div>
           </div>
         </div>
       }
-
-      
     </div>
   </div>
 </div>

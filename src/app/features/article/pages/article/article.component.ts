@@ -9,7 +9,6 @@ import { UserService } from "../../../../core/auth/services/user.service";
 import { ArticleMetaComponent } from "../../components/article-meta.component";
 import { AsyncPipe, NgClass } from "@angular/common";
 import { MarkdownPipe } from "../../../../shared/pipes/markdown.pipe";
-import { ListErrorsComponent } from "../../../../shared/components/list-errors.component";
 import { ArticleCommentComponent } from "../../components/article-comment.component";
 import { catchError } from "rxjs/operators";
 import { combineLatest, throwError } from "rxjs";
@@ -20,6 +19,7 @@ import { Profile } from "../../../profile/models/profile.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FavoriteButtonComponent } from "../../components/favorite-button.component";
 import { FollowButtonComponent } from "../../../profile/components/follow-button.component";
+import { ListErrorsComponent } from "src/app/shared/components/list-erros/list-errors.component";
 
 @Component({
   selector: "app-article-page",
@@ -58,7 +58,7 @@ export default class ArticleComponent implements OnInit {
     private readonly articleService: ArticlesService,
     private readonly commentsService: CommentsService,
     private readonly router: Router,
-    private readonly userService: UserService,
+    private readonly userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -73,7 +73,7 @@ export default class ArticleComponent implements OnInit {
           void this.router.navigate(["/"]);
           return throwError(() => err);
         }),
-        takeUntilDestroyed(this.destroyRef),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(([article, comments, currentUser]) => {
         this.article = article;

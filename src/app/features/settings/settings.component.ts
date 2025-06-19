@@ -8,9 +8,9 @@ import {
 import { Router } from "@angular/router";
 import { User } from "../../core/auth/user.model";
 import { UserService } from "../../core/auth/services/user.service";
-import { ListErrorsComponent } from "../../shared/components/list-errors.component";
 import { Errors } from "../../core/models/errors.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ListErrorsComponent } from "src/app/shared/components/list-erros/list-errors.component";
 
 interface SettingsForm {
   image: FormControl<string>;
@@ -44,12 +44,12 @@ export default class SettingsComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly userService: UserService,
+    private readonly userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.settingsForm.patchValue(
-      this.userService.getCurrentUser() as Partial<User>,
+      this.userService.getCurrentUser() as Partial<User>
     );
   }
 

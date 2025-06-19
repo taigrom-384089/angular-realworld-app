@@ -22,6 +22,7 @@ import { EMPTY } from "rxjs";
 import { HttpClientInMemoryWebApiModule } from "angular-in-memory-web-api";
 import { InMemoryDataService } from "./core/in-memory-data.service";
 import { provideClientHydration } from "@angular/platform-browser";
+import { provideAnimations } from "@angular/platform-browser/animations";
 
 export function initAuth(jwtService: JwtService, userService: UserService) {
   return jwtService.getToken() ? userService.getCurrentUser() : EMPTY;
@@ -29,6 +30,7 @@ export function initAuth(jwtService: JwtService, userService: UserService) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAnimations(),
     provideRouter(routes),
     provideClientHydration(),
     provideHttpClient(

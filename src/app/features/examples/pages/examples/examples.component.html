@@ -1,0 +1,43 @@
+<mat-toolbar color="primary">
+  <span>Angular Material Generic Modal Demo</span>
+</mat-toolbar>
+
+<div style="padding: 20px">
+  <h1>Demonstrating Generic Modals</h1>
+
+  <button mat-raised-button color="primary" (click)="openSimpleModal()">
+    Open Simple Modal
+  </button>
+
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="openModalWithCustomHeaderBodyFooter()"
+    style="margin-left: 10px"
+  >
+    Open Custom H/B/F Modal
+  </button>
+
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="openModalWithCustomStringBody()"
+    style="margin-left: 10px"
+  >
+    Open String Body Modal
+  </button>
+
+  <h2>Using Service Convenience Methods</h2>
+  <button mat-raised-button color="primary" (click)="openConfirmViaService()">
+    Open Confirm Dialog
+  </button>
+
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="openAlertViaService()"
+    style="margin-left: 10px"
+  >
+    Open Alert Dialog
+  </button>
+</div>

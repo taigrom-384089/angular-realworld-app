@@ -30,7 +30,7 @@ export default class HomeComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly userService: UserService,
+    private readonly userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -43,10 +43,10 @@ export default class HomeComponent implements OnInit {
             this.setListTo("all");
           }
         }),
-        takeUntilDestroyed(this.destroyRef),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(
-        (isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated),
+        (isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated)
       );
   }
 

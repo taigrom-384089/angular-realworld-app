@@ -10,8 +10,8 @@ import { combineLatest } from "rxjs";
 import { Errors } from "../../../../core/models/errors.model";
 import { ArticlesService } from "../../services/articles.service";
 import { UserService } from "../../../../core/auth/services/user.service";
-import { ListErrorsComponent } from "../../../../shared/components/list-errors.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ListErrorsComponent } from "src/app/shared/components/list-erros/list-errors.component";
 
 interface ArticleForm {
   title: FormControl<string>;
@@ -42,7 +42,7 @@ export default class EditorComponent implements OnInit {
     private readonly articleService: ArticlesService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly userService: UserService,
+    private readonly userService: UserService
   ) {}
 
   ngOnInit() {

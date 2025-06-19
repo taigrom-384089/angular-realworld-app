@@ -1,0 +1,61 @@
+@if (data.header; as header) {
+  @if (isComponent(header)) {
+    <ng-container *ngComponentOutlet="header"></ng-container>
+  } @else {
+    <div mat-dialog-title>
+      <h2>{{ header }}</h2>
+      @if (data.showCloseButton !== false) {
+        <button
+          mat-icon-button
+          class="close-button ml-auto"
+          [mat-dialog-close]="true"
+        >
+          <mat-icon class="close-icon" color="warn">close</mat-icon>
+        </button>
+      }
+    </div>
+  }
+} @else {
+  <div mat-dialog-title>
+    <h2>{{ data.title || "Modal Title" }}</h2>
+    @if (data.showCloseButton !== false) {
+      <button mat-icon-button class="close-button" [mat-dialog-close]="true">
+        <mat-icon class="close-icon" color="warn">close</mat-icon>
+      </button>
+    }
+  </div>
+}
+
+<mat-dialog-content>
+  @if (data.body; as body) {
+    @if (isComponent(body)) {
+      <ng-container *ngComponentOutlet="body"></ng-container>
+    } @else {
+      <p>{{ body }}</p>
+    }
+  } @else {
+    <p>{{ data.message || "This is the body of the generic modal." }}</p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  @if (data.footer; as footer) {
+    @if (isComponent(footer)) {
+      <ng-container *ngComponentOutlet="footer"></ng-container>
+    } @else {
+      <button mat-button (click)="onCancel()">
+        {{ data.cancelButtonText || "Cancel" }}
+      </button>
+      <button mat-button color="primary" (click)="onConfirm()">
+        {{ data.confirmButtonText || "OK" }}
+      </button>
+    }
+  } @else {
+    <button mat-button (click)="onCancel()">
+      {{ data.cancelButtonText || "Cancel" }}
+    </button>
+    <button mat-button color="primary" (click)="onConfirm()">
+      {{ data.confirmButtonText || "OK" }}
+    </button>
+  }
+</mat-dialog-actions>

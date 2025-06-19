@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Input } from "@angular/core";
+import { Component, DestroyRef, inject, input, Input } from "@angular/core";
 import { ArticlesService } from "../services/articles.service";
 import { ArticleListConfig } from "../models/article-list-config.model";
 import { Article } from "../models/article.model";
@@ -55,16 +55,18 @@ export class ArticleListComponent {
   destroyRef = inject(DestroyRef);
 
   @Input() limit!: number;
-  @Input()
-  set config(config: ArticleListConfig) {
-    if (config) {
-      this.query = config;
-      this.currentPage = 1;
-      this.runQuery();
-    }
-  }
 
-  constructor(private articlesService: ArticlesService) { }
+  config = input(undefined, {
+    transform: (value: ArticleListConfig) => {
+      if (value) {
+        this.query = value;
+        this.currentPage = 1;
+        this.runQuery();
+      }
+    },
+  });
+
+  constructor(private articlesService: ArticlesService) {}
 
   setPageTo(pageNumber: number) {
     this.currentPage = pageNumber;
@@ -91,7 +93,7 @@ export class ArticleListComponent {
         // Used from http://www.jstips.co/en/create-range-0...n-easily-using-one-line/
         this.totalPages = Array.from(
           new Array(Math.ceil(data.articlesCount / this.limit)),
-          (val, index) => index + 1,
+          (val, index) => index + 1
         );
       });
   }

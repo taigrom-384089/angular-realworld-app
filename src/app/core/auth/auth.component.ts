@@ -6,10 +6,10 @@ import {
   ReactiveFormsModule,
 } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { ListErrorsComponent } from "../../shared/components/list-errors.component";
 import { Errors } from "../models/errors.model";
 import { UserService } from "./services/user.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ListErrorsComponent } from "src/app/shared/components/list-erros/list-errors.component";
 
 interface AuthForm {
   email: FormControl<string>;
@@ -34,7 +34,7 @@ export default class AuthComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly userService: UserService,
+    private readonly userService: UserService
   ) {
     this.authForm = new FormGroup<AuthForm>({
       email: new FormControl("", {
@@ -57,7 +57,7 @@ export default class AuthComponent implements OnInit {
         new FormControl("", {
           validators: [Validators.required],
           nonNullable: true,
-        }),
+        })
       );
     }
   }
@@ -69,14 +69,14 @@ export default class AuthComponent implements OnInit {
     let observable =
       this.authType === "login"
         ? this.userService.login(
-            this.authForm.value as { email: string; password: string },
+            this.authForm.value as { email: string; password: string }
           )
         : this.userService.register(
             this.authForm.value as {
               email: string;
               password: string;
               username: string;
-            },
+            }
           );
 
     observable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({

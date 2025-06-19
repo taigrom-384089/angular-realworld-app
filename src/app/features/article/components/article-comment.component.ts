@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from "@angular/core";
+import { Component, inject, input, output } from "@angular/core";
 import { UserService } from "../../../core/auth/services/user.service";
 import { User } from "../../../core/auth/user.model";
 import { RouterLink } from "@angular/router";
@@ -9,7 +9,7 @@ import { AsyncPipe, DatePipe } from "@angular/common";
 @Component({
   selector: "app-article-comment",
   template: `
-    @if (comment) {
+    @if (comment(); as comment) {
       <div class="card">
         <div class="card-block">
           <p class="card-text">
@@ -46,13 +46,13 @@ import { AsyncPipe, DatePipe } from "@angular/common";
   standalone: true,
 })
 export class ArticleCommentComponent {
-  @Input() comment!: Comment;
-  @Output() delete = new EventEmitter<boolean>();
+  comment = input.required<Comment>();
+  delete = output<boolean>();
 
   canModify$ = inject(UserService).currentUser.pipe(
     map(
       (userData: User | null) =>
-        userData?.username === this.comment.author.username,
-    ),
+        userData?.username === this.comment().author.username
+    )
   );
 }
